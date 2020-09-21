@@ -1,7 +1,3 @@
-// TODO: content_scriptsの軽量化かSCRIPTの読み込み方法の改善．
-// 現状，注入するスクリプトを文字列として保持するので読み込みに時間がかかり，動画再生と
-// 同時に再生される広告で若干処理が間に合わない． 
-
 // inject js program from webpack.
 declare const SCRIPT: string;
 
