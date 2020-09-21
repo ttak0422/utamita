@@ -1,6 +1,8 @@
 /**
  * memo
  * - video.srcを`defineProperty`で直接監視するとYouTubeが動作しなくなる．
+ * - utamita.jsは再生される動画をチェックして音量の変更を行う．
+ * - isAdvertisement()を毎回呼び出すことが理想ではあるもの重たい．動作の軽さを大事にする．
  */
 
 // TODO: ミュート時の音量の調整．あくまで音量調節を行う拡張として開発．
@@ -10,14 +12,20 @@
 import * as Rx from "rxjs";
 import * as RxOp from "rxjs/operators";
 
-const fps = Math.floor(1000 / 60);
-const threshold = 100; 
-const source = Rx.interval(fps);
-const subscription = new Rx.Subscription();
+/**
+ * ${interval}msec間隔で処理を実行する．
+ */
+const interval = Math.floor(1000 / 60);
 
-let isPlayingAdvertisement = true;
-// 本編のシーク位置を保持．
-let memTime = 0.0;
+/**
+ * mediaのsrcが変わった瞬間に広告要素が構築されない．
+ * 広告要素をもとに今何を再生しているか判定するため，
+ * mediaのsrcが変化してから${delay}msec待機し判定につなぐ．
+ */
+const delay = 60 * interval;
+
+const source = Rx.interval(interval);
+const subscription = new Rx.Subscription();
 
 function isAdvertisement() {
     return document.getElementsByClassName("ytp-ad-preview-container").length > 0;
@@ -26,36 +34,32 @@ function isAdvertisement() {
 function utamita() {
     const video: any = document.getElementsByClassName('video-stream html5-main-video')[0];
     if (video === null) return;
-    video.volume = 0; // mute
+
+    function updateVolume() {
+        if (isAdvertisement()) {
+            video.volume = 0.0;
+            console.log("maybe advertisement");
+        } else {
+            video.volume = 1.0;
+            console.log("maybe main content");
+        }
+    }
+
+    updateVolume();
+    console.log("subscription");
     subscription.add(
-        source
-            .pipe(RxOp.map(x => [x, video.getCurrentTime()]))
-            .pipe(RxOp.pairwise())
-            .pipe(RxOp.filter(x => {
-                const prev = x[0];
-                const next = x[1];
-                // はじめ一定時間は監視を行う．
-                if (prev[0] < threshold) return true;
-                
-                // 動画の再生位置が0に戻った．つまり
-                // 本編から広告，広告から広告に移り変わったとき．
-                const f1 = prev[1] > next[1];
-                // TODO: refactor 広告から本編に移り変わったことを検出．
-                const f2 = isPlayingAdvertisement && memTime - 1.0 < next[1] && next[1] < memTime + 1.0;
-                return f1 || f2;
-            }))
-            .subscribe(_ => {
-                const time = video.getCurrentTime();
-                isPlayingAdvertisement = isAdvertisement();
-                if (isPlayingAdvertisement) {
+        source.pipe
+            (RxOp.map(_ => video.src)
+                , RxOp.pairwise()
+                , RxOp.filter(([prev, next]) => prev !== next)
+                , RxOp.tap(_ => {
+                    console.log("mute once");
                     video.volume = 0.0;
-                    console.log("maybe advertisement");
-                } else {
-                    memTime = video.getCurrentTime();
-                    video.volume = 1.0;
-                    console.log("maybe main content");
-                }
-            }));
+                })
+                // TODO: delayで拾いきれないケースへの対応．(t, 2t, 4tで実行とか)
+                , RxOp.delay(delay))
+            .subscribe(_ => updateVolume()));
 }
 
+console.log("utamita");
 utamita();
