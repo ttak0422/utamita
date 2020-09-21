@@ -1,30 +1,17 @@
-// TODO: merge config
 import Webpack from "webpack";
 import Path from "path";
 import Fs from "fs";
 import CopyWebpackPlugin from "copy-webpack-plugin";
+import merge from "webpack-merge";
+import common from "./webpack.common";
 
 const injectScript = Fs.readFileSync("dist/utamita.js").toString();
-const rules: Webpack.RuleSetRule[] = [
-    {
-        test: /\.ts$/,
-        use: "ts-loader",
-    }
-]
 
-const module: Webpack.Module = {
-    rules: rules
-};
-
-const config: Webpack.Configuration = {
+const config: Webpack.Configuration = merge(common, {
     entry: {
         "content": Path.join(__dirname, "src/content.ts"),
         "eventpage": Path.join(__dirname, "src/eventpage.ts"),
         "fast-mute": Path.join(__dirname, "src/fast-mute.ts"),
-    },
-    output: {
-        filename: "[name].js",
-        path: Path.join(__dirname, "dist"),
     },
     plugins: [
         new CopyWebpackPlugin({
@@ -38,7 +25,6 @@ const config: Webpack.Configuration = {
             SCRIPT: JSON.stringify(injectScript),
         }),
     ],
-    module: module
-};
+});
 
 export default config;

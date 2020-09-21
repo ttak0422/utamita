@@ -1,26 +1,12 @@
 import Webpack from "webpack";
 import Path from "path";
+import merge from "webpack-merge";
+import common from "./webpack.common"
 
-const rules: Webpack.RuleSetRule[] = [
-    {
-        test: /\.ts$/,
-        use: "ts-loader",
-    }
-]
-
-const module: Webpack.Module = {
-    rules: rules
-};
-
-const config: Webpack.Configuration = {
+const config: Webpack.Configuration = merge(common, {
     entry: {
         "utamita": Path.join(__dirname, "src/utamita.ts"),
-    },
-    output: {
-        filename: "[name].js",
-        path: Path.join(__dirname, "dist"),
-    },
-    module: module
-};
+    }
+});
 
 export default config;
