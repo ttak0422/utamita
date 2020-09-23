@@ -9,8 +9,7 @@
         "https://*.youtube.com/*"
       ],
       "js": [
-        "content.js",
-        "fast-mute.js"
+        "content.js"
       ],
       "run_at": "document_end"
     }

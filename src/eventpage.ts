@@ -5,7 +5,7 @@
 chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
     // URLがYouTubeの視聴ページだった場合，`content_scripts`経由でスクリプトを注入する．
     if (info.status === "complete" && tab.url?.indexOf("https://www.youtube.com/watch?") !== -1) {
-        chrome.tabs.executeScript(tabId, { file: "fast-mute.js" }, () => {});
+        chrome.tabs.executeScript(tabId, { code: 'let v=document.getElementsByClassName("video-stream html5-main-video")[0];if(v!==null)v.volume=0;' }, () => {});
         chrome.tabs.sendMessage(tabId, { type: "onUpdate" }, () => {});
     }
 });
