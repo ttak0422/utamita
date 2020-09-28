@@ -16,17 +16,10 @@ function removeScript() {
     document.body.removeChild(inject);
 }
 
-function mute() {
-    const video: any = document.getElementsByClassName('video-stream html5-main-video')[0];
-    if (video === null) return;
-    video.volume = 0.0;
-}
-
 // eventpageからの要請に応じて処理を実行．
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === "onUpdate") {
         console.log("execute utamita");
-        mute();
         removeScript();
         addScript();
     }

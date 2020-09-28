@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "UtaMita",
   "description": "YouTubeの広告の音量を調整する．",
-  "version": "0.2",
+  "version": "0.3",
   "content_scripts": [
     {
       "matches": [
@@ -11,7 +11,7 @@
       "js": [
         "content.js"
       ],
-      "run_at": "document_end"
+      "run_at": "document_start"
     }
   ],
   "background": {

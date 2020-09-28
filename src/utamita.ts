@@ -7,7 +7,6 @@
 
 // TODO: ミュート時の音量の調整．あくまで音量調節を行う拡張として開発．
 // TODO: 普段の音量の調整
-// TODO: isAdvertisementの高速化
 
 import * as Rx from "rxjs";
 import * as RxOp from "rxjs/operators";
@@ -18,22 +17,31 @@ import * as RxOp from "rxjs/operators";
 const interval = Math.floor(1000 / 60);
 
 /**
- * mediaのsrcが変わった瞬間に広告要素が構築されない．
- * 広告要素をもとに今何を再生しているか判定するため，
- * mediaのsrcが変化してから${delay}msec待機し判定につなぐ．
+ * srcの変更後内容が更新されるまで待つ．保険．
  */
-const delay = 60 * interval;
+const delay = 3 * interval;
 
 const source = Rx.interval(interval);
 const subscription = new Rx.Subscription();
 
+let video:any = document.getElementsByClassName('video-stream html5-main-video')[0];
+let bar: Element = document.body.getElementsByClassName("ytp-play-progress ytp-swatch-background-color")[0];
+let barStyle: CSSStyleDeclaration =  getComputedStyle(bar);
+
 function isAdvertisement() {
-    return document.getElementsByClassName("ytp-ad-preview-container").length > 0;
+    let x = barStyle.getPropertyValue("background-color");
+    console.log(x);
+    return x !== "rgb(255, 0, 0)";
 }
 
 function utamita() {
-    const video: any = document.getElementsByClassName('video-stream html5-main-video')[0];
-    if (video === null) return;
+    if (video === null || barStyle === null) { 
+        console.log("not found");
+        video = document.getElementsByClassName('video-stream html5-main-video')[0];
+        bar = document.body.getElementsByClassName("ytp-play-progress ytp-swatch-background-color")[0];
+        barStyle =  getComputedStyle(bar);
+        utamita();
+    }
 
     function updateVolume() {
         if (isAdvertisement()) {
@@ -52,11 +60,10 @@ function utamita() {
             (RxOp.map(_ => video.src)
                 , RxOp.pairwise()
                 , RxOp.filter(([prev, next]) => prev !== next)
-                , RxOp.tap(_ => {
-                    console.log("mute once");
+                , RxOp.tap(([prev, next]) => {
+                    console.log(`mute once, p: ${prev}, n: ${next}`);
                     video.volume = 0.0;
                 })
-                // TODO: delayで拾いきれないケースへの対応．(t, 2t, 4tで実行とか)
                 , RxOp.delay(delay))
             .subscribe(_ => updateVolume()));
 }
