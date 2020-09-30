@@ -1,26 +1,31 @@
+import { APP_ID, appEvent } from "./util";
+
+const scriptID = APP_ID + "_script";
+
 // inject js program from webpack.
 declare const SCRIPT: string;
-
-const ID = "4061c014756fab760ae16a3abf3c3b236084962e32be55dedfda48b0927159a0";
 
 function addScript() {
     const inject = document.createElement("script");
     inject.appendChild(document.createTextNode(SCRIPT));
-    inject.id = ID;
+    inject.id = scriptID;
     document.body.appendChild(inject);
 }
 
 function removeScript() {
-    const inject = document.getElementById(ID);
+    const inject = document.getElementById(scriptID);
     if (inject === null) return;
     document.body.removeChild(inject);
 }
 
 // eventpageからの要請に応じて処理を実行．
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === "onUpdate") {
-        console.log("execute utamita");
+    if (request.type === appEvent.on) {
+        console.log(`contant on`);
         removeScript();
         addScript();
+    } else if (request.type === appEvent.off) {
+        console.log(`content off`);
+        removeScript();
     }
 });

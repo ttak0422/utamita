@@ -20,8 +20,13 @@
     ],
     "persistent": false
   },
+  "page_action": {
+    "default_title": "YouTubeAdVolumeController", 
+    "default_popup": "popup.html"
+  },
   "permissions": [
     "tabs",
-    "https://www.youtube.com/*"
+    "https://www.youtube.com/*",
+    "storage"
   ]
 }

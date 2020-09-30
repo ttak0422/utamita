@@ -5,8 +5,6 @@
  * - isAdvertisement()を毎回呼び出すことが理想ではあるもの重たい．動作の軽さを大事にする．
  */
 
-// TODO: ミュート時の音量の調整．あくまで音量調節を行う拡張として開発．
-// TODO: 普段の音量の調整
 
 import * as Rx from "rxjs";
 import * as RxOp from "rxjs/operators";
@@ -24,9 +22,10 @@ const delay = 3 * interval;
 const source = Rx.interval(interval);
 const subscription = new Rx.Subscription();
 
-let video:any = document.getElementsByClassName('video-stream html5-main-video')[0];
+let video: any = document.getElementsByClassName('video-stream html5-main-video')[0];
 let bar: Element = document.body.getElementsByClassName("ytp-play-progress ytp-swatch-background-color")[0];
-let barStyle: CSSStyleDeclaration =  getComputedStyle(bar);
+let barStyle: CSSStyleDeclaration = getComputedStyle(bar);
+let contentVolume: number = (video.volume && Number(video.volume) !== 0.0) ? Number(video.volume) : 1.0;
 
 function isAdvertisement() {
     let x = barStyle.getPropertyValue("background-color");
@@ -35,26 +34,20 @@ function isAdvertisement() {
 }
 
 function utamita() {
-    if (video === null || barStyle === null) { 
+    if (video === null || barStyle === null) {
         console.log("not found");
         video = document.getElementsByClassName('video-stream html5-main-video')[0];
         bar = document.body.getElementsByClassName("ytp-play-progress ytp-swatch-background-color")[0];
-        barStyle =  getComputedStyle(bar);
+        barStyle = getComputedStyle(bar);
         utamita();
     }
 
-    function updateVolume() {
-        if (isAdvertisement()) {
-            video.volume = 0.0;
-            console.log("maybe advertisement");
-        } else {
-            video.volume = 1.0;
-            console.log("maybe main content");
-        }
+    if (isAdvertisement()) {
+        video.volume = 0;
+    } else {
+        video.volume = contentVolume;
     }
 
-    updateVolume();
-    console.log("subscription");
     subscription.add(
         source.pipe
             (RxOp.map(_ => video.src)
@@ -64,9 +57,22 @@ function utamita() {
                     console.log(`mute once, p: ${prev}, n: ${next}`);
                     video.volume = 0.0;
                 })
-                , RxOp.delay(delay))
-            .subscribe(_ => updateVolume()));
+                , RxOp.delay(delay)
+                , RxOp.map(_ => isAdvertisement())
+                , RxOp.distinctUntilChanged())
+            .subscribe(isAdvertisement => {
+                // content -> advertisement
+                if (isAdvertisement) {
+                    console.log("maybe advertisement");
+                    contentVolume = video.volume;
+                    video.volume = 0.0;
+                }
+                // advertisement -> content
+                else {
+                    console.log("maybe main content");
+                    video.volume = contentVolume;
+                }
+            }));
 }
 
-console.log("utamita");
 utamita();
