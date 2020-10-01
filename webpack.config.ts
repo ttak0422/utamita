@@ -11,7 +11,7 @@ const config: Webpack.Configuration = merge(common, {
     entry: {
         "content": Path.join(__dirname, "src/content.ts"),
         "eventpage": Path.join(__dirname, "src/eventpage.ts"),
-        "fast-mute": Path.join(__dirname, "src/fast-mute.ts"),
+        "popup": Path.join(__dirname, "src/popup.tsx"),
     },
     plugins: [
         new CopyWebpackPlugin({
