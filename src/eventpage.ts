@@ -24,6 +24,7 @@ chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
             // 最速で反映される方法で一旦ミュート
             chrome.tabs.executeScript(tabId, { code: 'let v=document.getElementsByClassName("video-stream html5-main-video")[0];if(v!==null)v.volume=0;' }, () => { });
             chrome.tabs.sendMessage(tabId, { type: "onUpdate" }, () => { });
+            chrome.tabs.sendMessage(tabId, { type: appEvent.on }, () => { });
         }
     }
     else if (info.status === chromeTabsEvents.unloaded && tab.url?.indexOf("https://www.youtube.com/watch?") !== -1) {
