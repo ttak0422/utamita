@@ -24,8 +24,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         console.log(`contant on`);
         removeScript();
         addScript();
+        sendResponse();
     } else if (request.type === appEvent.off) {
         console.log(`content off`);
         removeScript();
+        sendResponse();
     }
 });
