@@ -33,7 +33,7 @@ chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
         if (enabled) {
             watchList.push(tabId);
             // 最速で反映される方法で一旦ミュート
-            chrome.tabs.executeScript(tabId, { code: 'let v=document.getElementsByClassName("video-stream html5-main-video")[0];if(v!==null)v.volume=0;' }, () => { });
+            chrome.tabs.executeScript(tabId, { code: 'let v=document.getElementsByClassName("video-stream html5-main-video")[0];if(v!==null)v.muted=true;' }, () => { });
             chrome.tabs.sendMessage(tabId, { type: appEvent.on }, () => { });
         }
     }
