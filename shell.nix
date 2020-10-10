@@ -4,7 +4,7 @@ let
 in pkgs.mkShell {
   buildInputs = with pkgs;
     [
-      nodejs
+      nodejs-12_x
       yarn
       # keep this line if you use bash
       bashInteractive
