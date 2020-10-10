@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "UtaMita",
-  "description": "YouTubeの広告の音量を調整する．",
-  "version": "0.3",
+  "name": "YouTube Ad Mute",
+  "description": "Automatically mutes the volume of YouTube ads. One of the options for distributors.",
+  "version": "1.0",
   "content_scripts": [
     {
       "matches": [
@@ -21,6 +21,9 @@
     "persistent": false
   },
   "page_action": {
+    "default_icon": {
+      "19": "icon19.png"
+    },
     "default_title": "YouTubeAdVolumeController", 
     "default_popup": "popup.html"
   },
@@ -28,5 +31,10 @@
     "tabs",
     "https://www.youtube.com/*",
     "storage"
-  ]
+  ],
+  "icons": {
+    "16":  "icon16.png",
+    "48":  "icon48.png",
+    "128": "icon128.png"
+  }
 }
