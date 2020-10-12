@@ -11,7 +11,7 @@ yarn install
 yarn grunt
 ```
 
-## Production Build
+## Development Build
 
 ```bash
 yarn install
