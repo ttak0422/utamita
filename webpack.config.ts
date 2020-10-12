@@ -7,7 +7,7 @@ import common from "./webpack.common";
 
 const injectScript = Fs.readFileSync("dist/utamita.js").toString();
 
-const config: Webpack.Configuration = merge(common, {
+module.exports = (env: any) => merge(common(env?.isProduction === "true"), {
     entry: {
         "content": Path.join(__dirname, "src/content.ts"),
         "eventpage": Path.join(__dirname, "src/eventpage.ts"),
@@ -26,5 +26,3 @@ const config: Webpack.Configuration = merge(common, {
         }),
     ],
 });
-
-export default config;

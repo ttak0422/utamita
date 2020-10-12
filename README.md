@@ -4,9 +4,16 @@
 <img src="https://user-images.githubusercontent.com/15827817/95651405-2e18ba00-0b25-11eb-8dec-694a84ecfbe5.png">
 </div>
 
-## Build
+## Production Build
 
 ```bash
 yarn install
 yarn grunt
+```
+
+## Production Build
+
+```bash
+yarn install
+yarn grunt dev
 ```
