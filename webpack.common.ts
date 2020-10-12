@@ -1,6 +1,7 @@
 import Webpack from "webpack";
 import Path from "path";
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 const module: Webpack.Module = {
     rules: [
@@ -27,7 +28,7 @@ const module: Webpack.Module = {
 const plugins: Webpack.Plugin[] = [
     new MiniCssExtractPlugin({
         filename: 'css/styles.css'
-      }),
+    }),
 ]
 
 const output: Webpack.Output = {
@@ -41,11 +42,32 @@ const resolve: Webpack.Resolve = {
     ],
 }
 
-const config: Webpack.Configuration = {
-    output,
-    module,
-    plugins,
-    resolve
+const optimization = (isProduction: boolean): Webpack.Options.Optimization => {
+    return {
+        minimizer:
+            isProduction ? [
+                new TerserPlugin({
+                    terserOptions: {
+                        compress: { drop_console: true }
+                    }
+                })
+            ] : [],
+    }
+}
+
+const config = (isProduction: boolean): Webpack.Configuration => {
+    console.log();
+    console.log(`isProduction ${isProduction}`);
+    console.log();
+
+    return {
+        mode: "production",
+        output,
+        module,
+        plugins,
+        optimization: optimization(isProduction),
+        resolve
+    }
 };
 
 export default config;
