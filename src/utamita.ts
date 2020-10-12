@@ -53,8 +53,7 @@ function utamita() {
                     video.muted = true;
                 })
                 , RxOp.delay(delay)
-                , RxOp.map(_ => isAdvertisement())
-                , RxOp.distinctUntilChanged())
+                , RxOp.map(_ => isAdvertisement()))
             .subscribe(isAdvertisement => {
                 // content -> advertisement
                 if (isAdvertisement) {
