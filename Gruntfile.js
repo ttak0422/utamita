@@ -5,8 +5,8 @@ module.exports = function (grunt) {
             production: {
                 command:
                     ['if [ -d "dist" ]; then rm -r dist;  fi'
-                        , 'webpack --config webpack.utamita.ts --env.isProduction=true'
-                        , 'webpack --config webpack.config.ts --env.isProduction=true'
+                        , 'webpack --config webpack.utamita.ts --env isProduction=true'
+                        , 'webpack --config webpack.config.ts --env isProduction=true'
                     ].join(' && ')
             },
             development: {
