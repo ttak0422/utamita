@@ -1,3 +1,4 @@
+![Node.js CI](https://github.com/ttak0422/utamita/workflows/Node.js%20CI/badge.svg)
 <div align="center">
 <h1>YouTube Ad Mute (utamita)</h1>
 <p>Automatically mutes the volume of YouTube ads.</p>
