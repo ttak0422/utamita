@@ -25,6 +25,14 @@ const subscription = new Rx.Subscription();
 let video: any = document.getElementsByClassName('video-stream html5-main-video')[0];
 let bar: Element = document.body.getElementsByClassName("ytp-play-progress ytp-swatch-background-color")[0];
 let barStyle: CSSStyleDeclaration = getComputedStyle(bar);
+let btn: Element = document.body.getElementsByClassName("ytp-mute-button ytp-button")[0];
+
+/**
+ * utamitaによってではなくユーザが自主的に音量をミュートしているかどうか？
+ */
+function isMuted() {
+    return btn.children[0].childElementCount === 2;
+}
 
 function isAdvertisement() {
     let x = barStyle.getPropertyValue("background-color");
@@ -41,7 +49,11 @@ function utamita() {
         utamita();
     }
 
-    video.muted = isAdvertisement();
+    if(!isMuted()) {
+        video.muted = isAdvertisement();
+    } else {
+        // video.muted = true;
+    }
 
     subscription.add(
         source.pipe
@@ -63,7 +75,12 @@ function utamita() {
                 // advertisement -> content
                 else {
                     console.log("maybe main content");
-                    video.muted = false;
+                    if(!isMuted()) {
+                        console.log("明示的にミュートしていないのでミュート解除");
+                        video.muted = false;
+                    } else {
+                        console.log("明示的にミュートしているのでミュート解除しない");
+                    }
                 }
             }));
 }
