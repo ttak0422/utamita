@@ -1,0 +1,16 @@
+YouTubeの広告の音量を自動的にミュートにします．配信などでYouTubeを安心して利用するための選択肢の一つになればと思います．
+Automatically mutes the volume of YouTube ads. One of the options for distributors.
+
+他の拡張機能などを用いてYouTubeのカラースキームを変更すると正しく動作しないことがあります．
+If you change the color scheme of YouTube using other extensions, this extension may not work properly.
+
+
+Release notes
+
+--- v1.0.2 ---
+Fixed a bug that mute is canceled without permission.
+--- v1.0.1 ---
+Support chages in video quelity.
+Remove some logs for developper.
+--- v1.0.0 ---
+Released.
