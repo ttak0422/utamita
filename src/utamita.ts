@@ -41,14 +41,26 @@ function isAdvertisement() {
 }
 
 function utamita() {
-    if (video === null || barStyle === null) {
-        console.log("not found");
+    if (video === null) {
+        console.log("video not found");
         video = document.getElementsByClassName('video-stream html5-main-video')[0];
+        utamita();
+        return;
+    }
+    if(barStyle === null) {
+        console.log("barStyle not found");
         bar = document.body.getElementsByClassName("ytp-play-progress ytp-swatch-background-color")[0];
         barStyle = getComputedStyle(bar);
         utamita();
+        return;
     }
-
+    if(btn === null) {
+        console.log("btn not found");
+        btn = document.body.getElementsByClassName("ytp-mute-button ytp-button")[0];
+        utamita();
+        return;
+    }
+    
     if(!isMuted()) {
         video.muted = isAdvertisement();
     } else {

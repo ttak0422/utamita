@@ -6,7 +6,8 @@ If you change the color scheme of YouTube using other extensions, this extension
 
 
 Release notes
-
+--- v1.0.3 ---
+Improved stability
 --- v1.0.2 ---
 Fixed a bug that mute is canceled without permission.
 --- v1.0.1 ---
