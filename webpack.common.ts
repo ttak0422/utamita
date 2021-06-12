@@ -1,73 +1,64 @@
-import Webpack from "webpack";
+import { Configuration } from "webpack";
 import Path from "path";
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
-const module: Webpack.Module = {
-    rules: [
+const optimization = (isProduction: boolean) => {
+  return {
+    minimizer:
+      isProduction ? [
+      new TerserPlugin({
+        terserOptions: {
+          compress: { drop_console: true }
+        }
+      })
+    ] : [],
+  }
+}
+
+const config = (isProduction: boolean): Configuration => {
+  console.log();
+  console.log(`isProduction ${isProduction}`);
+  console.log();
+
+  return {
+    mode: "production",
+    output: {
+      filename: "[name].js",
+      path: Path.join(__dirname, "dist"),
+    },
+    module: {
+      rules: [
         {
-            test: /\.tsx?$/,
-            use: "ts-loader",
+          test: /\.tsx?$/,
+          use: "ts-loader",
         },
         {
-            test: /\.scss$/,
-            use: [
-                MiniCssExtractPlugin.loader,
-                {
-                    loader: 'css-loader'
-                },
-                {
-                    loader: 'sass-loader',
-                }
-            ]
+          test: /\.scss$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader'
+            },
+            {
+              loader: 'sass-loader',
+            }
+          ]
         }
-    ],
-
-};
-
-const plugins: Webpack.Plugin[] = [
-    new MiniCssExtractPlugin({
+      ],
+    },
+    plugins: [
+      new MiniCssExtractPlugin({
         filename: 'css/styles.css'
-    }),
-]
-
-const output: Webpack.Output = {
-    filename: "[name].js",
-    path: Path.join(__dirname, "dist"),
-}
-
-const resolve: Webpack.Resolve = {
-    extensions: [
-        ".ts", ".js"
+      }),
     ],
-}
-
-const optimization = (isProduction: boolean): Webpack.Options.Optimization => {
-    return {
-        minimizer:
-            isProduction ? [
-                new TerserPlugin({
-                    terserOptions: {
-                        compress: { drop_console: true }
-                    }
-                })
-            ] : [],
+    optimization: optimization(isProduction),
+    resolve: {
+      extensions: [
+        ".ts", ".js"
+      ],
     }
-}
-
-const config = (isProduction: boolean): Webpack.Configuration => {
-    console.log();
-    console.log(`isProduction ${isProduction}`);
-    console.log();
-
-    return {
-        mode: "production",
-        output,
-        module,
-        plugins,
-        optimization: optimization(isProduction),
-        resolve
-    }
+  }
 };
 
 export default config;
