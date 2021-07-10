@@ -1,6 +1,6 @@
 {
     "niv": {
-        "branch": "master",
+        "branch": "main",
         "description": "Easy dependency management for Nix projects",
         "homepage": "https://github.com/nmattia/niv",
         "owner": "nmattia",
