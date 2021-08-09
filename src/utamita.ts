@@ -22,7 +22,7 @@ const delay = 3 * interval;
 const source = Rx.interval(interval);
 const subscription = new Rx.Subscription();
 
-let video: any = document.getElementsByClassName('video-stream html5-main-video')[0];
+let video: any = document.getElementById("movie_player");
 let bar: Element = document.body.getElementsByClassName("ytp-play-progress ytp-swatch-background-color")[0];
 let barStyle: CSSStyleDeclaration = getComputedStyle(bar);
 let btn: Element = document.body.getElementsByClassName("ytp-mute-button ytp-button")[0];
@@ -43,7 +43,7 @@ function isAdvertisement() {
 function utamita() {
     if (video === null) {
         console.log("video not found");
-        video = document.getElementsByClassName('video-stream html5-main-video')[0];
+        video = document.getElementById("movie_player");
         utamita();
         return;
     }
@@ -62,7 +62,11 @@ function utamita() {
     }
     
     if(!isMuted()) {
-        video.muted = isAdvertisement();
+        if (isAdvertisement()) {
+            video.mute();
+        } else {
+            video.unMute();
+        }
     } else {
         // video.muted = true;
     }
@@ -74,7 +78,7 @@ function utamita() {
                 , RxOp.filter(([prev, next]) => prev !== next)
                 , RxOp.tap(([prev, next]) => {
                     console.log(`mute once, p: ${prev}, n: ${next}`);
-                    video.muted = true;
+                    video.mute();
                 })
                 , RxOp.delay(delay)
                 , RxOp.map(_ => isAdvertisement()))
@@ -82,14 +86,14 @@ function utamita() {
                 // content -> advertisement
                 if (isAdvertisement) {
                     console.log("maybe advertisement");
-                    video.muted = true;
+                    video.mute();
                 }
                 // advertisement -> content
                 else {
                     console.log("maybe main content");
                     if(!isMuted()) {
                         console.log("明示的にミュートしていないのでミュート解除");
-                        video.muted = false;
+                        video.unMute();
                     } else {
                         console.log("明示的にミュートしているのでミュート解除しない");
                     }
