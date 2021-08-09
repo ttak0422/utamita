@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "YouTube Ad Mute",
   "description": "Automatically mutes the volume of YouTube ads. One of the options for distributors.",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "content_scripts": [
     {
       "matches": [

@@ -21,7 +21,7 @@ function removeScript() {
 // eventpageからの要請に応じて処理を実行．
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === appEvent.on) {
-        console.log(`contant on`);
+        console.log(`content on`);
         removeScript();
         addScript();
         sendResponse();
