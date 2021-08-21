@@ -1,37 +1,18 @@
 import { AppEvent } from "./util";
-import { chromeGet } from "./chrome";
 import { Keys, makeLocalVolume, Urls } from "./youtube";
+import { ChromeTabsEvents } from "./chrome";
 
-const ChromeTabsEvents = {
-  Unloaded: "unloaded",
-  Loading: "loading",
-  Complete: "complete",
-} as const;
-
-type ChromeTabsEvents = typeof ChromeTabsEvents[keyof typeof ChromeTabsEvents];
-
-// App status
-let enabled = true;
 // YouTube watch pages
 let watchList: number[] = [];
 
-chromeGet("enabled").then((savedEnabled) => {
-  console.log(`load enabled: ${savedEnabled}`);
-  for (let tabId of watchList) {
-    chrome.tabs.sendMessage(
-      tabId,
-      { type: savedEnabled ? AppEvent.On : AppEvent.Off },
-      () => {}
-    );
-  }
-});
-
+// WIP
+// watch page transition
 chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
-  // set default mute
   if (
     info.status === ChromeTabsEvents.Loading &&
     tab.url?.indexOf(Urls.TOP) !== -1
   ) {
+    // set mute
     let json = localStorage.getItem(Keys.YT_PLAYER_VOLUME);
     if (json == null) {
       localStorage.setItem(Keys.YT_PLAYER_VOLUME, makeLocalVolume(100, true));
@@ -43,36 +24,30 @@ chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
       );
     }
   }
-  // URLがYouTubeの視聴ページだった場合，`content_scripts`経由でスクリプトを注入する．
-  if (
+  else if (
     info.status === ChromeTabsEvents.Complete &&
     tab.url?.indexOf(Urls.WATCH) !== -1
   ) {
+    // inject code
     console.log("loaded");
     chrome.pageAction.show(tabId);
-    if (enabled) {
-      watchList.push(tabId);
-      chrome.tabs.sendMessage(tabId, { type: AppEvent.On }, () => {});
-    }
+    watchList.push(tabId);
+    chrome.tabs.sendMessage(
+      tabId,
+      { type: AppEvent.On },
+      () => {}
+    );
   } else if (
     info.status === ChromeTabsEvents.Unloaded &&
     tab.url?.indexOf(Urls.WATCH) !== -1
   ) {
+    // remove injected code
     console.log("Unloaded");
     watchList = watchList.filter((x) => x !== tabId);
-  }
-});
-
-chrome.storage.onChanged.addListener((changes, _ns) => {
-  if (changes["enabled"]) {
-    enabled = changes["enabled"].newValue as boolean;
-    console.log(`changed enabled: ${enabled}`);
-    for (let tabId of watchList) {
-      chrome.tabs.sendMessage(
-        tabId,
-        { type: enabled ? AppEvent.On : AppEvent.Off },
-        () => {}
-      );
-    }
+    chrome.tabs.sendMessage(
+      tabId,
+      { type: AppEvent.Off },
+      () => {}
+    );
   }
 });

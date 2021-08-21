@@ -22,9 +22,7 @@ function removeScript() {
   document.body.removeChild(inject);
 }
 
-/**
- * Change of operation mode
- */
+// Watch application mode
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   if (request.type === AppEvent.On) {
     console.log(`content on`);
