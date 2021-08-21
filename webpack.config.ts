@@ -11,7 +11,6 @@ module.exports = (env: any) => merge(common(env?.isProduction === "true"), {
     entry: {
         "content": Path.join(__dirname, "src/content.ts"),
         "eventpage": Path.join(__dirname, "src/eventpage.ts"),
-        "popup": Path.join(__dirname, "src/popup.tsx"),
     },
     plugins: [
         new CopyWebpackPlugin({

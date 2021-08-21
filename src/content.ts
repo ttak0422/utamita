@@ -1,33 +1,38 @@
-import { APP_ID, appEvent } from "./util";
+import { APP_ID, AppEvent } from './util';
 
-const scriptID = APP_ID + "_script";
-
-// inject js program from webpack.
+// The script to be injected
 declare const SCRIPT: string;
 
+/**
+ * Inject script
+ */
 function addScript() {
-    const inject = document.createElement("script");
-    inject.appendChild(document.createTextNode(SCRIPT));
-    inject.id = scriptID;
-    document.body.appendChild(inject);
+  const inject = document.createElement('script');
+  inject.appendChild(document.createTextNode(SCRIPT));
+  inject.id = APP_ID;
+  document.body.appendChild(inject);
 }
 
+/**
+ * Remove the injected script
+ */
 function removeScript() {
-    const inject = document.getElementById(scriptID);
-    if (inject === null) return;
-    document.body.removeChild(inject);
+  const inject = document.getElementById(APP_ID);
+  if (inject === null) return;
+  document.body.removeChild(inject);
 }
 
-// eventpageからの要請に応じて処理を実行．
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === appEvent.on) {
-        console.log(`contant on`);
-        removeScript();
-        addScript();
-        sendResponse();
-    } else if (request.type === appEvent.off) {
-        console.log(`content off`);
-        removeScript();
-        sendResponse();
-    }
+// Watch application mode
+chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+  if (request.type === AppEvent.On) {
+    console.log(`content on`);
+    removeScript();
+    addScript();
+    sendResponse();
+  } else if (request.type === AppEvent.Off) {
+    console.log(`content off`);
+    removeScript();
+    sendResponse();
+  }
+  return true;
 });
