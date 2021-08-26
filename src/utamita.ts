@@ -3,7 +3,6 @@ import * as RxOp from "rxjs/operators";
 import { Keys, makeLocalVolume } from "./youtube";
 import { YtMuteButton, YtVideo, YtVideoSrc } from "./wrapper";
 import { HTMLAriaElement, NORMAL_BAR_COLLOR } from "./util";
-import { getWithDefault } from "./storage";
 
 declare module globalThis {
   let Utamita: Rx.Subscription[];
@@ -45,8 +44,7 @@ function init() {
   if ("utamitaMyMute" in btn) {
     //
   } else {
-    const myMute = getWithDefault("my-mute", false);
-    btn.utamitaMyMute = myMute;
+    btn.utamitaMyMute = false;
     btn.addEventListener("click", (_ev) => {
       const muted = video.isMuted();
       btn.utamitaMyMute = muted;
