@@ -34,7 +34,6 @@ const isAdvertisement = () => {
   }
 }
 
-
 function init() {
   for (const s of globalThis.Utamita) {
     console.log("unsubscribe");

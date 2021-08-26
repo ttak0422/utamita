@@ -11,7 +11,7 @@ export type Keys = typeof Keys[keyof typeof Keys];
 // YouTube URLs
 export const Urls = {
     TOP: "https://www.youtube.com",
-    WATCH: "https://www.youtube.com",
+    WATCH: "https://www.youtube.com/watch",
 } as const;
 
 export type Urls = typeof Urls[keyof typeof Urls];
