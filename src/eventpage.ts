@@ -32,6 +32,7 @@ chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
     console.log("loaded");
     chrome.pageAction.show(tabId);
     watchList.push(tabId);
+    chrome.tabs.executeScript(tabId, { code: 'document.getElementById("movie_player")?.mute();' }, () => { });
     chrome.tabs.sendMessage(
       tabId,
       { type: AppEvent.On },
