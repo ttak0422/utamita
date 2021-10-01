@@ -9,7 +9,7 @@
   "devDependencies": {
     "@types/chrome": "^0.0.154",
     "@types/copy-webpack-plugin": "^8.0.1",
-    "@types/react": "^17.0.19",
+    "@types/react": "^17.0.26",
     "@types/react-dom": "^17.0.9",
     "@types/terser-webpack-plugin": "^5.0.4",
     "@types/webpack": "^5.28.0",
