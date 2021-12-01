@@ -7,7 +7,7 @@
     "rxjs": "^7.4.0"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.162",
+    "@types/chrome": "^0.0.165",
     "@types/copy-webpack-plugin": "^8.0.1",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.9",
