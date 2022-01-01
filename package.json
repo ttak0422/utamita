@@ -16,7 +16,7 @@
     "@types/webpack-merge": "^5.0.0",
     "bulma": "^0.9.3",
     "bulma-extensions": "^6.2.7",
-    "copy-webpack-plugin": "^9.0.1",
+    "copy-webpack-plugin": "^10.2.0",
     "css-loader": "^6.5.1",
     "grunt": "^1.4.1",
     "grunt-shell": "^3.0.1",
