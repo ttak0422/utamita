@@ -10,7 +10,7 @@
     "@types/chrome": "^0.0.180",
     "@types/copy-webpack-plugin": "^8.0.1",
     "@types/react": "^17.0.43",
-    "@types/react-dom": "^17.0.9",
+    "@types/react-dom": "^17.0.14",
     "@types/terser-webpack-plugin": "^5.2.0",
     "@types/webpack": "^5.28.0",
     "@types/webpack-merge": "^5.0.0",
