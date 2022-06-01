@@ -14,7 +14,7 @@
     "@types/terser-webpack-plugin": "^5.2.0",
     "@types/webpack": "^5.28.0",
     "@types/webpack-merge": "^5.0.0",
-    "bulma": "^0.9.3",
+    "bulma": "^0.9.4",
     "bulma-extensions": "^6.2.7",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
