@@ -3,14 +3,14 @@
   "license": "MIT",
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.1.0",
+    "react-dom": "^18.2.0",
     "rxjs": "^7.5.5"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.193",
     "@types/copy-webpack-plugin": "^8.0.1",
     "@types/react": "^18.0.14",
-    "@types/react-dom": "^18.0.5",
+    "@types/react-dom": "^18.0.6",
     "@types/terser-webpack-plugin": "^5.2.0",
     "@types/webpack": "^5.28.0",
     "@types/webpack-merge": "^5.0.0",
